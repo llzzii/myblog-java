@@ -1,0 +1,36 @@
+<div class="list-card" *ngFor="let data of dataList">
+  <nz-card style="width: 100%;margin-top: 16px" nzHoverable="true " (click)="goToDetail(data.blogId)" nzSize="small">
+    <nz-skeleton [nzLoading]="loading">
+      <div class="blog-content">
+        <aside>
+          <nz-avatar nzSrc="../../../assets/user/nan.jpg"></nz-avatar>
+        </aside>
+
+        <section class="clearfix">
+          <header>
+            <h4>{{data?.blogTitle}}</h4> <span
+              class="pullright">{{data?.blogCreatedTime| date: "y-MM-dd HH:mm:ss"}}</span>
+          </header>
+
+
+          <div class="content">
+            {{data?.blogContent}}
+          </div>
+          <div class="tags" *ngIf="data?.tagName!=''&&data?.tagName!=null&&data?.tagName.length>0"><i nz-icon
+              nzType="tags" title="标签" nzTheme="outline"></i>
+            <nz-tag [nzColor]="color.colors[i]" *ngFor="let tag of data.tagName;let i=index">{{tag}}</nz-tag>
+          </div>
+          <footer>
+            <span><i nz-icon nzType="eye" title="查看" nzTheme="outline"></i> {{data?.blogViews||0}}</span>
+            <span><i nz-icon nzType="like" title="喜欢" nzTheme="outline"></i> {{data?.blogLikeCount||0}}</span>
+            <span><i nz-icon nzType="edit" title="评论" nzTheme="outline"></i> {{data?.blogCommentCount||0}}</span>
+          </footer>
+        </section>
+      </div>
+    </nz-skeleton>
+  </nz-card>
+
+</div>
+<div class="loadmore">
+  <button nz-button *ngIf="loadingMore" (click)="onLoadMore()">加载更多</button>
+</div>

@@ -1,0 +1,87 @@
+.demo-loadmore-list {
+  min-height: 350px;
+}
+
+.loadmore {
+  text-align: center;
+  margin-top: 12px;
+  height: 32px;
+  line-height: 32px;
+}
+
+.list-card {
+  padding: 10px 50px;
+}
+
+.blog-content {}
+
+.blog-content aside {
+  float: left;
+}
+
+.blog-content aside nz-avatar {
+  height: 40px;
+  width: 40px;
+}
+
+.blog-content aside nz-avatar:hover {
+  transform: rotate(360deg);
+  transition: transform 2s;
+}
+
+.blog-content section {
+  margin-left: 60px;
+}
+
+.blog-content section header {
+  overflow: hidden;
+}
+
+.blog-content section header h4 {
+  float: left;
+  font-size: 18px
+}
+
+.pullright {
+  float: right;
+}
+
+.tags {
+  margin: 5px 0;
+}
+
+.tags i {
+  margin-right: 10px;
+}
+
+.blog-content section footer {
+  line-height: 40px;
+}
+
+.blog-content footer {}
+
+.blog-content footer span {
+  padding-right: 20px;
+}
+
+.content {
+  max-height: 100px;
+  overflow: hidden;
+  color: #999;
+  text-overflow: ellipsis;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 2;
+
+  overflow: hidden;
+
+  /*! autoprefixer: off */
+
+  -webkit-box-orient: vertical;
+
+}
+
+.ant-card-body {
+  padding-bottom: 10px;
+}

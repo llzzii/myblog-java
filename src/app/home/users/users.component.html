@@ -1,0 +1,83 @@
+<div *ngIf="rowdata">
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="username">用户名</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        {{rowdata?.userName||"--"}}
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userNickname">
+        昵称
+      </nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input nz-input id="userNickname" formControlName="userNickname" />
+        <nz-form-explain *ngIf="validateForm.get('userNickname')?.dirty && validateForm.get('userNickname')?.errors">
+          1-36个字符，只能包含中文、字母、数字和特殊字符"-""_"
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userEmail">
+        邮箱
+      </nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input nz-input id="userEmail" formControlName="userEmail" />
+        <nz-form-explain *ngIf="validateForm.get('userEmail')?.dirty && validateForm.get('userEmail')?.errors">输入正确邮箱!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userSex">性别</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-radio-group formControlName="userSex" [nzButtonStyle]="'solid'">
+          <label nz-radio-button nzValue="male">男</label>
+          <label nz-radio-button nzValue="female">女</label>
+          <label nz-radio-button nzValue="secrecy">保密</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userBirthday">生日</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-date-picker formControlName="userBirthday" placeholder="请选择日期"></nz-date-picker>
+
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userImgurl">头像</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-upload nzAction="/api/updateImage" nzListType="picture-card" [(nzFileList)]="fileList"
+          [nzShowButton]="fileList.length < 1" [nzShowUploadList]="showUploadList" [nzPreview]="handlePreview">
+          <i nz-icon nzType="plus"></i>
+          <div class="ant-upload-text">Upload</div>
+        </nz-upload>
+        <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null"
+          (nzOnCancel)="previewVisible = false">
+          <ng-template #modalContent>
+            <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+          </ng-template>
+        </nz-modal>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userTelephone">电话</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input nz-input id="userTelephone" formControlName="userTelephone" placeholder="电话号码" />
+        <nz-form-explain *ngIf="validateForm.get('userTelephone')?.dirty && validateForm.get('userTelephone')?.errors">
+          请输入正确的电话号码
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="userDeclaration">个性宣言</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <input nz-input id="userDeclaration" formControlName="userDeclaration" placeholder="个性宣言" />
+        <nz-form-explain
+          *ngIf="validateForm.get('userDeclaration')?.dirty && validateForm.get('userDeclaration')?.errors">
+          0-255个字符
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>

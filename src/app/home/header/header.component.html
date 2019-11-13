@@ -1,0 +1,88 @@
+<div nz-row class="header">
+  <div nz-col nzSpan="4">
+    <p class="logo">
+      <span class="logoText" data-letters="myLove">myLove</span>
+
+    </p>
+  </div>
+  <div nz-col nzSpan="12">
+    <div class="search-div">
+
+      <nz-input-group [nzPrefix]="prefixTemplate">
+        <input type="text" class="search-in" nz-input placeholder="search" />
+      </nz-input-group>
+      <ng-template #prefixTemplate><i nz-icon type="search"></i></ng-template>
+
+
+    </div>
+  </div>
+  <div nz-col nzSpan="8" class="right">
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item title="首页" routerLink='/home'><i nz-icon type="home"></i></li>
+      <li *ngIf="!islogin" nz-menu-item title="登录" (click)="login(loginfrom)"><i nz-icon type="login"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="写博客" routerLink='/home/add'><i nz-icon nzType="highlight"
+          nzTheme="outline"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="通知"><i nz-icon type="bell"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="标签"><i nz-icon type="tag"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="个人信息" (click)="openUser()"><i nz-icon type="user"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="退出" (click)="logout()"><i nz-icon type="logout"></i></li>
+
+    </ul>
+  </div>
+</div>
+
+
+<ng-template #loginfrom>
+  <form nz-form [formGroup]="loginForm" class="login-form">
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group [nzPrefix]="prefixUser">
+          <input type="text" nz-input formControlName="userName" [(ngModel)]="username" (keyup)="isUsername($event)"
+            placeholder="用户名" />
+        </nz-input-group>
+        <nz-form-explain *ngIf="loginForm.get('userName')?.dirty && loginForm.get('userName')?.errors">请输入您的用户名!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group [nzPrefix]="prefixLock" [nzSuffix]="suffixTemplate">
+          <input [type]="passwordVisible ? 'text' : 'password'" [(ngModel)]="password" nz-input
+            formControlName="userPassword" placeholder="密码" />
+        </nz-input-group>
+        <nz-form-explain *ngIf="loginForm.get('userPassword')?.dirty && loginForm.get('userPassword')?.errors">
+          请输入您的密码!</nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item *ngIf="isNewUser">
+
+      <nz-form-control>
+        <nz-input-group [nzPrefix]="prefixLock" [nzSuffix]="suffixTemplate">
+          <input [type]="passwordVisible ? 'text' : 'password'" nz-input formControlName="checkPassword"
+            placeholder="再次输入密码" />
+        </nz-input-group>
+        <nz-form-explain *ngIf="loginForm.get('checkPassword')?.dirty && loginForm.get('checkPassword')?.errors">
+          <ng-container *ngIf="loginForm.get('checkPassword')?.hasError('required')">
+            请再次输入您的密码!
+          </ng-container>
+          <ng-container *ngIf="loginForm.get('checkPassword')?.hasError('confirm')">
+            两次密码不一致!
+          </ng-container>
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item *ngIf="isNewUser">
+      <nz-form-control>
+        <nz-input-group [nzPrefix]="prefixUser2">
+          <input nz-input id="userNickname" formControlName="userNickname" placeholder="请输入您的昵称" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
+  <ng-template #prefixUser2><i nz-icon type="user-add"></i></ng-template>
+  <ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>
+  <ng-template #suffixTemplate>
+    <i nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'" (click)="passwordVisible = !passwordVisible"></i>
+  </ng-template>
+</ng-template>

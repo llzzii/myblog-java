@@ -1,0 +1,177 @@
+nz-header,
+nz-footer {
+  background: #fff;
+
+}
+
+.fixg {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  top: 0;
+}
+
+nz-footer {
+  line-height: 1.5;
+}
+
+nz-sider {
+  background: transparent;
+  overflow-y: auto;
+
+}
+
+nz-content {
+  background: transparent;
+
+  min-height: 120px;
+
+}
+
+nz-layout {
+  margin-bottom: 48px;
+  background: transparent
+}
+
+nz-layout:last-child {
+  margin: 0;
+}
+
+nz-header {
+  background: #fff;
+  position: relative;
+  z-index: 10;
+  max-width: 100%;
+  box-shadow: 0 2px 8px #f0f1f2;
+}
+
+.collapsed {
+  float: right;
+  padding: 5px;
+}
+
+.collapsedImg {
+  position: fixed;
+  top: 70px;
+  left: 2px;
+  z-index: 200;
+}
+
+.warp>div:first-child {
+  margin-right: 20px;
+}
+
+.warp {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+.d-h-src {
+  width: 46px;
+  height: 46px;
+  float: left;
+}
+
+.d-h-button {
+  float: right;
+  margin-right: 30px;
+  margin-top: 12px;
+  border: 1px solid #1890ff;
+  color: #1890ff;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+.d-h-content {
+  margin-left: 60px;
+  margin-right: 100px;
+  min-height: 60px;
+}
+
+.d-h-content span {
+  margin-right: 15px;
+}
+
+.footer {
+  padding: 10px 0;
+  text-align: center;
+}
+
+.footer button {
+  width: 90px;
+  height: 90px;
+  font-size: 26px;
+
+}
+
+.author-span {
+  background: #FCF8E3;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #8A6D3B !important;
+  padding: 2px 4px;
+}
+
+.liker {
+  color: #1890ff;
+}
+
+.defailt {
+  color: #595959;
+}
+
+.replay-com {
+  margin-top: 10px;
+  font-size: 13px;
+  background-color: #FAFAFA;
+  padding: 10px 10px;
+  color: #666;
+}
+
+.author-info p {
+  font-size: 14px;
+}
+
+.author-info p i {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.catalog {
+  font-size: 1.167rem;
+  color: #000;
+}
+
+.catalog-body {
+  position: relative;
+  margin: 6px 0;
+  overflow: hidden;
+}
+
+.catalog-body ul {
+  position: relative;
+}
+
+::ng-deep .markdown-toc-list li a {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #333;
+  list-style: none;
+}
+
+::ng-deep .markdown-toc-list>li a {
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1.3;
+
+  list-style: none;
+}

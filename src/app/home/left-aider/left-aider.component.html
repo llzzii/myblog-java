@@ -1,0 +1,22 @@
+<div class="user-info">
+  <img [src]="userImgUrl" />
+  <h2>{{username}}</h2>
+  <p>{{userDes}}</p>
+</div>
+
+<div class="list">
+  <div class="title"><span>最新文章</span></div>
+  <nz-list [nzDataSource]="data" nzBordered="false" nzSplit="false" [nzRenderItem]="item" nzSize="small"
+    [nzItemLayout]="'horizontal'" [nzLoading]="loading">
+    <ng-template #item let-item>
+      <nz-list-item routerLink="/home/detail/{{item.blogId}}" [nzContent]="item.blogTitle"></nz-list-item>
+    </ng-template>
+
+  </nz-list>
+</div>
+<div class="list">
+  <div class="title"><span>标签</span></div>
+  <div class="tags">
+    <nz-tag style="margin: 3px" *ngFor="let data of tagDatas" [nzColor]="data.color">{{data.tag}}</nz-tag>
+  </div>
+</div>

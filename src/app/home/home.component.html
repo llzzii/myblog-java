@@ -1,0 +1,18 @@
+<nz-layout class="fixg">
+  <nz-header>
+    <app-header (changeLogin)="changeLogin($event,$event)"></app-header>
+  </nz-header>
+  <nz-layout>
+    <nz-sider [hidden]="!isCollapsed" id="rightHeight">
+      <a class="collapsed" (click)="changeCollapsed(false)"><i nz-icon nzType="shrink" nzTheme="outline"></i></a>
+      <app-left-aider [username]="username" [isLogin]="isLogin"></app-left-aider>
+    </nz-sider>
+    <nz-avatar *ngIf="!isCollapsed" class="collapsedImg" (click)="changeCollapsed(true)" [nzSize]="50"
+      nzSrc="../../assets/user/nan.jpg">
+    </nz-avatar>
+    <nz-content id="mainHeight">
+      <router-outlet></router-outlet>
+    </nz-content>
+
+  </nz-layout>
+</nz-layout>

@@ -1,0 +1,60 @@
+nz-header,
+nz-footer {
+  background: #fff;
+
+}
+
+.fixg {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  top: 0;
+}
+
+nz-footer {
+  line-height: 1.5;
+}
+
+nz-sider {
+  background: transparent;
+  overflow-y: auto;
+
+}
+
+nz-content {
+  background: transparent;
+
+  min-height: 120px;
+
+}
+
+nz-layout {
+  margin-bottom: 48px;
+  background: transparent
+}
+
+nz-layout:last-child {
+  margin: 0;
+}
+
+nz-header {
+  background: #fff;
+  position: relative;
+  z-index: 10;
+  max-width: 100%;
+  box-shadow: 0 2px 8px #f0f1f2;
+}
+
+.collapsed {
+  float: right;
+  padding: 5px;
+}
+
+.collapsedImg {
+  position: fixed;
+  top: 70px;
+  left: 2px;
+  z-index: 200;
+}
