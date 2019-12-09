@@ -1,0 +1,19 @@
+.msg-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.msg-list li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px dotted #9a9a9a;
+  line-height: 36px;
+  min-width: 300px;
+}
+
+.msg-list li span {
+  padding-right: 10px;
+
+}

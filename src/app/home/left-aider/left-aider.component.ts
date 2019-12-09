@@ -62,12 +62,18 @@ export class LeftAiderComponent implements OnInit {
           if (datas.isok) {
             this.username = datas.data.userNickname || datas.data.userName;
             this.userDes = datas.data.userDeclaration || "咸鱼一条";
+            // this.userImgUrl =
+            //   environment.serviceApi + "images/" + datas.data.userImgurl ||
+            //   "../../../assets/user/nan.jpg";
             this.userImgUrl =
-              environment.serviceApi + "images/" + datas.data.userImgurl ||
-              "../../../assets/user/nan.jpg";
+              environment.serviceApi + (datas.data.userImgurl || "nan.jpg");
           }
         });
     }
+  }
+  loadError() {
+    this.userImgUrl = "../../../assets/user/nan.jpg";
+    console.log(this.userImgUrl);
   }
   ngOnInit() {
     // this.isLogin = this.communicationService.islogin;

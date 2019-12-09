@@ -1,0 +1,8 @@
+<ul class="msg-list" *ngIf="dataSet!=null">
+  <li *ngFor="let data of dataSet">
+    <span [innerHtml]="data.message"></span><span>{{(data.createdTime | date: "y-MM-dd HH:mm:ss")}}</span>
+  </li>
+  <li *ngIf="dataSet==null||dataSet.length==0">
+    <nz-empty></nz-empty>
+  </li>
+</ul>

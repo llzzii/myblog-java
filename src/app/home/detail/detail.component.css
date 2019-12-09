@@ -107,6 +107,11 @@ nz-header {
 
 }
 
+.likered button {
+  background-color: #ec9511;
+  border-color: #ec9511;
+}
+
 .author-span {
   background: #FCF8E3;
   border-radius: 3px;
@@ -122,6 +127,8 @@ nz-header {
 .defailt {
   color: #595959;
 }
+
+
 
 .replay-com {
   margin-top: 10px;

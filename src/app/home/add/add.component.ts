@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { NzMessageService } from "ng-zorro-antd";
 
 import { HomeService } from "../home.service";
@@ -34,7 +34,8 @@ export class AddComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private homeService: HomeService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private router: Router
   ) {}
 
   submit(mid, tag_ids): void {
@@ -49,6 +50,7 @@ export class AddComponent implements OnInit {
         this.isLoading = false;
         if (datas.isok) {
           this.message.create("success", "添加成功");
+          this.router.navigate(["./home/detail/" + datas.data.blogId]);
           this.message.remove(mid);
         } else {
           this.message.create("error", `${datas.msg}`);

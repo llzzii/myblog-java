@@ -1,5 +1,6 @@
 <div class="user-info">
-  <img [src]="userImgUrl" />
+  <!-- <img [src]="userImgUrl" (nzError)="userImgUrl='/user/nan.jpg'" /> -->
+  <nz-avatar [nzSize]="150" [nzSrc]="'../../../assets/user/nan.jpg'" (nzError)="loadError()"></nz-avatar>
   <h2>{{username}}</h2>
   <p>{{userDes}}</p>
 </div>

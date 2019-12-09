@@ -22,7 +22,12 @@
       <li *ngIf="!islogin" nz-menu-item title="登录" (click)="login(loginfrom)"><i nz-icon type="login"></i></li>
       <li *ngIf="islogin" nz-menu-item title="写博客" routerLink='/home/add'><i nz-icon nzType="highlight"
           nzTheme="outline"></i></li>
-      <li *ngIf="islogin" nz-menu-item title="通知"><i nz-icon type="bell"></i></li>
+      <li *ngIf="islogin" nz-menu-item title="通知" nz-popover nzTitle="最新消息通知" [nzContent]="contentTemplate"
+        nzTrigger="click" nzPlacement="bottomRight">
+        <nz-badge [nzDot]="dot">
+          <i nz-icon type="bell"></i>
+        </nz-badge>
+      </li>
       <li *ngIf="islogin" nz-menu-item title="标签"><i nz-icon type="tag"></i></li>
       <li *ngIf="islogin" nz-menu-item title="个人信息" (click)="openUser()"><i nz-icon type="user"></i></li>
       <li *ngIf="islogin" nz-menu-item title="退出" (click)="logout()"><i nz-icon type="logout"></i></li>
@@ -85,4 +90,7 @@
   <ng-template #suffixTemplate>
     <i nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'" (click)="passwordVisible = !passwordVisible"></i>
   </ng-template>
+</ng-template>
+<ng-template #contentTemplate>
+  <app-message #message></app-message>
 </ng-template>

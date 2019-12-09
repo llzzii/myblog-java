@@ -132,6 +132,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     sessionStorage.removeItem("isLogin");
                     sessionStorage.removeItem("user_name");
                     sessionStorage.removeItem("token");
+                    sessionStorage.removeItem("user_id");
                     window.location.reload();
                   },
                   nzCancelText: null

@@ -55,7 +55,7 @@ export class HomeService {
     return this.http.get(url).pipe(tap(response => response));
   }
   addComent(data): Observable<any> {
-    let url = "/api/addComment";
+    let url = "/api/comment/add";
     return this.http
       .post(url, JSON.stringify(data), httpOptions)
       .pipe(tap(response => response));
@@ -65,17 +65,32 @@ export class HomeService {
     return this.http.get(url).pipe(tap(response => response));
   }
   addLike(data): Observable<any> {
-    let url = "/api/addLiker";
+    let url = "/api/liker/add";
     return this.http
       .post(url, JSON.stringify(data), httpOptions)
       .pipe(tap(response => response));
   }
-  deleteLike(data): Observable<any> {
-    let url = "/api/deleteLiker?comment_id=" + data.comment_id;
+  deleteLike(comment_id): Observable<any> {
+    let url = "/api/liker/delete?commentId=" + comment_id;
     return this.http.delete(url).pipe(tap(response => response));
   }
   getBlogDetail(blog_id): Observable<any> {
     let url = "/api/blog/detail?id=" + blog_id;
+    return this.http.get(url).pipe(tap(response => response));
+  }
+  deleteBlogLike(blogId): Observable<any> {
+    let url = "/api/blog/deleteLiker?blogId=" + blogId;
+    return this.http.delete(url).pipe(tap(response => response));
+  }
+  addBlogLike(data): Observable<any> {
+    let url = "/api/blog/addLiker";
+    return this.http
+      .post(url, JSON.stringify(data), httpOptions)
+      .pipe(tap(response => response));
+  }
+
+  getAllMsg(): Observable<any> {
+    let url = "/api/message/all";
     return this.http.get(url).pipe(tap(response => response));
   }
 }

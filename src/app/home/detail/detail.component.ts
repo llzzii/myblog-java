@@ -1,23 +1,31 @@
-import { Component, OnInit, TemplateRef, ViewChild, ViewContainerRef, forwardRef } from "@angular/core";
-
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+  forwardRef
+} from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { distanceInWords } from "date-fns";
-
 import { NzI18nService, zh_CN } from "ng-zorro-antd";
+
+import { WebSocketService } from "../../common/web-socket.service";
+import { ResponseData } from "../../entity";
+import { HomeService } from "../home.service";
 
 declare var editormd: any;
 const UEDITOR_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => DetailComponent),
-  multi: true,
+  multi: true
 };
-import { ResponseData } from "../../entity";
-import { HomeService } from "../home.service";
+
 @Component({
   selector: "app-detail",
   templateUrl: "./detail.component.html",
-  styleUrls: ["./detail.component.css"],
+  styleUrls: ["./detail.component.css"]
 })
 export class DetailComponent implements OnInit {
   @ViewChild("header") headerCom;
@@ -30,7 +38,7 @@ export class DetailComponent implements OnInit {
   user = {
     author: "游客",
     avatar: "../../../assets/user/nan.jpg",
-    userName: "",
+    userName: ""
   };
   inputValue = "";
   otherComent = false;
@@ -44,7 +52,8 @@ export class DetailComponent implements OnInit {
     private i18n: NzI18nService,
     private homeService: HomeService,
     private activedRoute: ActivatedRoute,
-    private vcRef: ViewContainerRef
+    private vcRef: ViewContainerRef,
+    private websocketService: WebSocketService
   ) {}
 
   handleSubmit(): void {
@@ -66,18 +75,20 @@ export class DetailComponent implements OnInit {
   }
 
   getComment() {
-    this.homeService.getComment(this.blogId).subscribe((datas: ResponseData) => {
-      if (datas.isok) {
-        this.commentData = datas.data.map((e, i, a) => {
-          return {
-            ...e,
-            displayTime: distanceInWords(new Date(), e.commentCreatedTime),
-            ishow: false,
-            index: i,
-          };
-        });
-      }
-    });
+    this.homeService
+      .getComment(this.blogId)
+      .subscribe((datas: ResponseData) => {
+        if (datas.isok) {
+          this.commentData = datas.data.map((e, i, a) => {
+            return {
+              ...e,
+              displayTime: distanceInWords(new Date(), e.commentCreatedTime),
+              ishow: false,
+              index: i
+            };
+          });
+        }
+      });
   }
   initEditorMd() {
     if (typeof editormd === "undefined") {
@@ -99,7 +110,7 @@ export class DetailComponent implements OnInit {
       taskList: true,
       tex: true, // 默认不解析
       flowChart: true, // 默认不解析
-      sequenceDiagram: true, // 默认不解析
+      sequenceDiagram: true // 默认不解析
     });
   }
   addComment(data) {
@@ -117,19 +128,27 @@ export class DetailComponent implements OnInit {
   getUserDetail() {
     this.homeService.getUser().subscribe((datas: ResponseData) => {
       if (datas.isok) {
-        this.user.author = datas.data.userNickname === "" ? datas.data.userName : datas.data.userNickname;
-        this.user.avatar = datas.data.userImgurl === "" ? "../../../assets/user/nan.jpg" : datas.data.userImgurl;
+        this.user.author =
+          datas.data.userNickname === ""
+            ? datas.data.userName
+            : datas.data.userNickname;
+        this.user.avatar =
+          datas.data.userImgurl === ""
+            ? "../../../assets/user/nan.jpg"
+            : datas.data.userImgurl;
         this.user.userName = datas.data.userName;
       }
     });
   }
   getBlogDetail() {
-    this.homeService.getBlogDetail(this.blogId).subscribe((datas: ResponseData) => {
-      if (datas.isok) {
-        this.blogData = datas.data;
-        this.initEditorMd();
-      }
-    });
+    this.homeService
+      .getBlogDetail(this.blogId)
+      .subscribe((datas: ResponseData) => {
+        if (datas.isok) {
+          this.blogData = datas.data;
+          this.initEditorMd();
+        }
+      });
   }
   like(comment_id, isLike) {
     let isLogin = sessionStorage.getItem("isLogin");
@@ -140,15 +159,52 @@ export class DetailComponent implements OnInit {
     let data = {};
     data["commentId"] = comment_id;
     if (isLike) {
-      this.homeService.deleteLike(data).subscribe((datas: ResponseData) => {
-        if (datas.isok) {
-          this.getComment();
-        }
-      });
+      this.homeService
+        .deleteLike(comment_id)
+        .subscribe((datas: ResponseData) => {
+          if (datas.isok) {
+            this.getComment();
+          }
+        });
     } else {
       this.homeService.addLike(data).subscribe((datas: ResponseData) => {
         if (datas.isok) {
           this.getComment();
+        }
+      });
+    }
+  }
+  addLikes(isLike = false) {
+    let isLogin = sessionStorage.getItem("isLogin");
+    if (isLogin == null || isLogin === "") {
+      this.headerCom.login();
+      return;
+    }
+    let data = {};
+    data["blogId"] = this.blogId;
+    let that = this;
+    if (isLike) {
+      this.homeService
+        .deleteBlogLike(this.blogId)
+        .subscribe((datas: ResponseData) => {
+          if (datas.isok) {
+            that.getBlogDetail();
+          }
+        });
+    } else {
+      this.homeService.addBlogLike(data).subscribe((datas: ResponseData) => {
+        if (datas.isok) {
+          this.getBlogDetail();
+          let senddata = {};
+          senddata["authorId"] = datas.data.authorId;
+          senddata["userId"] = sessionStorage.getItem("user_id");
+          senddata["message"] =
+            "<b>" +
+            this.user.userName +
+            "</b>赞了你的文章<b>" +
+            this.blogData.blog.blogTitle +
+            "</b>";
+          this.websocketService.sendMessage(JSON.stringify(senddata));
         }
       });
     }
@@ -170,7 +226,7 @@ export class DetailComponent implements OnInit {
         return {
           ...e,
           ishow: false,
-          index: t,
+          index: t
         };
       });
       this.commentData[i].ishow = true;

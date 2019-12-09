@@ -19,6 +19,7 @@ import { LeftAiderComponent } from "./left-aider/left-aider.component";
 import { RightAiderComponent } from "./right-aider/right-aider.component";
 import { TypesComponent } from "./types/types.component";
 import { UsersComponent } from "./users/users.component";
+import { MessageComponent } from './message/message.component';
 
 const routes: Routes = [
   { path: "add", component: AddComponent },
@@ -52,6 +53,7 @@ const routes: Routes = [
     TypesComponent,
     UsersComponent,
     DetailComponent,
+    MessageComponent,
   ],
   imports: [
     FormsModule,

@@ -1,11 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild
+} from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from "@angular/forms";
 import { Router } from "@angular/router";
 import { NzMessageService, NzModalRef, NzModalService } from "ng-zorro-antd";
 import { Subject, Subscription } from "rxjs";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 
 import { CommunicationService } from "../../common/communication.service";
+import { WebSocketService } from "../../common/web-socket.service";
 import { AddComponent } from "../add/add.component";
 import { HomeService } from "../home.service";
 import { UsersComponent } from "../users/users.component";
@@ -13,18 +27,19 @@ import { UsersComponent } from "../users/users.component";
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
-  styleUrls: ["./header.component.css"],
+  styleUrls: ["./header.component.css"]
 })
 export class HeaderComponent implements OnInit {
   @Output() changeLogin = new EventEmitter();
   @ViewChild("loginfrom") loginfromCom;
+  @ViewChild("message") messageCom;
   islogin = false;
   loginForm: FormGroup;
   passwordVisible = false;
   password: string;
   username: string;
   isNewUser = false;
-
+  dot = false;
   // 防抖
   debounceTime = 500;
   private isUser = new Subject<any>();
@@ -36,7 +51,8 @@ export class HeaderComponent implements OnInit {
     private homeService: HomeService,
     private router: Router,
     private message: NzMessageService,
-    private communicationService: CommunicationService
+    private communicationService: CommunicationService,
+    private websocketService: WebSocketService
   ) {}
 
   openUser(): void {
@@ -49,13 +65,15 @@ export class HeaderComponent implements OnInit {
       nzOkText: "提交",
       nzOnOk: (componentInstance: UsersComponent) => {
         return componentInstance.submitForm();
-      },
+      }
     });
 
     modal.afterOpen.subscribe(() => console.log("[afterOpen] emitted!"));
 
     // Return a result when closed
-    modal.afterClose.subscribe((result) => console.log("[afterClose] The result is:", result));
+    modal.afterClose.subscribe(result =>
+      console.log("[afterClose] The result is:", result)
+    );
   }
 
   login(loginfrom = this.loginfromCom) {
@@ -67,13 +85,15 @@ export class HeaderComponent implements OnInit {
       nzOkText: "提交",
       nzOnOk: (componentInstance: AddComponent) => {
         this.submitForm();
-      },
+      }
     });
 
     modal.afterOpen.subscribe(() => console.log("[afterOpen] emitted!"));
 
     // Return a result when closed
-    modal.afterClose.subscribe((result) => console.log("[afterClose] The result is:", result));
+    modal.afterClose.subscribe(result =>
+      console.log("[afterClose] The result is:", result)
+    );
   }
   submitForm(): void {
     let data = {};
@@ -83,15 +103,16 @@ export class HeaderComponent implements OnInit {
       data[i] = this.loginForm.controls[i].value;
     }
     this.homeService.login(data, this.isNewUser).subscribe(
-      (datas) => {
+      datas => {
         this.isNewUser = false;
         if (datas.isok) {
-          let token = datas.data;
+          let token = datas.data.token;
           sessionStorage.setItem("token", token);
           sessionStorage.setItem("isLogin", "true");
           sessionStorage.setItem("user_name", this.username);
+          sessionStorage.setItem("user_id", datas.data.userinfo.userId);
           this.islogin = true;
-
+          this.websocketService.connect(datas.data.userinfo.userId);
           this.communicationService.islogin = true;
           this.communicationService.username = this.username;
           this.changeLogin.emit(this.username);
@@ -100,7 +121,7 @@ export class HeaderComponent implements OnInit {
           this.islogin = false;
         }
       },
-      (error) => {
+      error => {
         console.log(error);
         this.islogin = false;
         this.isNewUser = false;
@@ -124,10 +145,17 @@ export class HeaderComponent implements OnInit {
     sessionStorage.removeItem("isLogin");
     sessionStorage.removeItem("user_name");
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user_id");
     this.islogin = false;
     this.communicationService.islogin = false;
     this.communicationService.username = "";
     this.changeLogin.emit("");
+  }
+  getMsg(obj, msg) {
+    if (msg != null && msg.data !== "" && obj && obj.dot != null) {
+      obj.dot = true;
+      console.log(msg);
+    }
   }
   ngOnInit() {
     if (sessionStorage.getItem("isLogin") === "true") {
@@ -135,25 +163,24 @@ export class HeaderComponent implements OnInit {
     }
     if (sessionStorage.getItem("user_name")) {
       this.username = sessionStorage.getItem("user_name");
+      this.websocketService.connect(sessionStorage.getItem("user_id"));
+      this.websocketService.getMessage(this);
       this.changeLogin.emit(this.username);
     }
     this.loginForm = this.fb.group({
       userName: [null, [Validators.required]],
       userPassword: [null, [Validators.required]],
       userNickname: [null],
-      checkPassword: [null, [Validators.required, this.confirmationValidator]],
+      checkPassword: [null, [Validators.required, this.confirmationValidator]]
     });
 
     this.subscription = this.isUser
-      .pipe(
-        debounceTime(this.debounceTime),
-        distinctUntilChanged()
-      )
-      .subscribe((e) => {
+      .pipe(debounceTime(this.debounceTime), distinctUntilChanged())
+      .subscribe(e => {
         let data = {};
         data["userName"] = e;
         data["userPassword"] = "";
-        this.homeService.login(data, false).subscribe((datas) => {
+        this.homeService.login(data, false).subscribe(datas => {
           if (datas.data === "noUser") {
             this.isNewUser = true;
           } else {
@@ -165,5 +192,6 @@ export class HeaderComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.websocketService.closeConnect();
   }
 }

@@ -24,8 +24,9 @@
             </div>
 
           </div>
-          <div class="footer">
-            <button nz-button nzType="primary" nzShape="circle">赞</button>
+          <div [class]="blogData?.isliker?'footer likered':'footer'">
+            <button nz-button nzType="primary" nzShape="circle" [title]="blogData?.isliker?'取消点赞':'点赞'"
+              (click)="addLikes(blogData?.isliker)">赞</button>
           </div>
           <div class="comment">
             <h2 class="comment-title">{{blogData?.allCommentCount}}条评论</h2>
@@ -35,39 +36,42 @@
               <ng-template #item let-item>
                 <nz-comment [nzAuthor]="authorTemplate" [nzDatetime]="item.commentCreatedTime | date: 'y年MM月dd日'">
                   <ng-template #authorTemplate>
-                    <span *ngIf="item.commentUser[0].userName===user.userName" class="author-span">作者</span>
-                    {{item.commentUser[0].userNickname==''?item.commentUser[0].userName:item.commentUser[0].userNickname}}
+                    <span *ngIf="item.commentUser.userName===user.userName" class="author-span">作者</span>
+                    {{item.commentUser.userNickname==''?item.commentUser.userName:item.commentUser.userNickname}}
                   </ng-template>
-                  <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.commentUser[0].userImgurl"></nz-avatar>
+                  <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.commentUser.userImgurl"></nz-avatar>
                   <nz-comment-content>
                     <p>{{ item.commentContent }}</p>
                   </nz-comment-content>
                   <nz-comment-action>
                     <i nz-tooltip [nzTitle]="item.isLike?'取消点赞':'点赞'" nz-icon type="like"
-                      [class]="item.isLike?'liker':'defailt'" [nzTheme]="item.LikeCount > 0 ? 'fill' : 'outline'"
+                      [class]="item.isLike?'liker':'defailt'" [nzTheme]="item.commentLikeCount > 0 ? 'fill' : 'outline'"
                       (click)="like(item.commentId,item.isLike)"></i>
 
-                    <span [class]="item.isLike?'liker count like':'count like'">({{ item.LikeCount }})</span>
+                    <span
+                      [class]="item.isLike?'liker count like':'count like'">({{ item.commentLikeCount==null?'0':item.commentLikeCount  }})</span>
                   </nz-comment-action>
                   <nz-comment-action><span (click)="addReplayTemplate(item.index)">回复</span></nz-comment-action>
                   <div *ngIf="item.children && item.children.length" style="background:#fafbfc" class="comment-child">
                     <div *ngFor="let data of item.children">
                       <nz-comment [nzAuthor]="authorTemplate" [nzDatetime]="data.commentCreatedTime | date: 'y年MM月dd日'">
                         <ng-template #authorTemplate>
-                          <span *ngIf="data.commentUser[0].userName===user.userName" class="author-span">作者</span>
-                          {{data.commentUser[0].userNickname==''?data.commentUser[0].userName:data.commentUser[0].userNickname}}
+                          <span *ngIf="data.commentUser.userName===user.userName" class="author-span">作者</span>
+                          {{data.commentUser.userNickname==''?data.commentUser.userName:data.commentUser.userNickname}}
                         </ng-template>
-                        <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="data.commentUser[0].userImgurl">
+                        <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="data.commentUser.userImgurl">
                         </nz-avatar>
                         <nz-comment-content>
                           <p>{{ data.commentContent }}</p>
                         </nz-comment-content>
                         <nz-comment-action>
                           <i nz-tooltip [nzTitle]="data.isLike?'取消点赞':'点赞'" nz-icon type="like"
-                            [class]="data.isLike?'liker':'defailt'" [nzTheme]="data.LikeCount > 0 ? 'fill' : 'outline'"
+                            [class]="data.isLike?'liker':'defailt'"
+                            [nzTheme]="data.commentLikeCount > 0 ? 'fill' : 'outline'"
                             (click)="like(data.commentId,data.isLike)"></i>
 
-                          <span [class]="data.isLike?'liker count like':'count like'">({{ data.LikeCount }})</span>
+                          <span
+                            [class]="data.isLike?'liker count like':'count like'">({{ data.commentLikeCount==null?'0':data.commentLikeCount }})</span>
                         </nz-comment-action>
                         <nz-comment-action><span (click)="addReplayTemplate(item.index,data)">回复</span>
                         </nz-comment-action>
@@ -114,7 +118,7 @@
               </p>
             </div>
             <p><i nz-icon nzType="like" nzTheme="twotone"></i> 获得点赞数
-              <span>{{blogData?.userInfo?.likeCount ||"0"}}</span></p>
+              <span>{{blogData?.blogLikeCount ||"0"}}</span></p>
             <p><i nz-icon nzType="heart" nzTheme="twotone"></i> 获得关注数
               <span>{{blogData?.userInfo?.likeCount ||"0"}}</span></p>
             <p><i nz-icon nzType="eye" nzTheme="twotone"></i> 文章被阅读
